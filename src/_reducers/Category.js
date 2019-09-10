@@ -41,8 +41,6 @@ const initialState = {
 
 export default Category = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_ALL_CATEGORY':
-      return {...state}
     case 'GET_MENU_CATEGORY':
       return {...state, categoryId: action.payload}
 

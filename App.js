@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import store from './src/_redux/store.js'
+import store from './src/_redux/store'
 import { Provider } from 'react-redux'
 
 import List from './src/app/Menu/List'
