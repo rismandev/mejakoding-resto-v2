@@ -2,25 +2,41 @@ import React, { Component } from 'react'
 import { View, Text, ScrollView, TouchableOpacity, Image, FlatList, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import FontAwesome from 'react-native-vector-icons/FontAwesome5'
+import AsyncStorage from '@react-native-community/async-storage'
+import { StackActions, NavigationActions } from 'react-navigation'
 
 import { getMenuByCategory } from '../../_actions/Category'
 import { addOrderMenu, addQtyMenu, decQtyMenu, delOrderMenu, addSubtotal, minSubTotal, clearOrderMenu, confirmDataOrder } from '../../_actions/Order'
 import { setIntervalTime, setCounter, resetInterval } from '../../_actions/Time'
+import { converToPrice } from '../../utils/Constant'
 
 class List extends Component {
 
     state = {
       swipe: 110,
-      refresh: false
+      refresh: false,
+      numberTable: null
     }
 
-    componentDidMount() {
+    async componentDidMount() {
 
-      this.props.dispatch(setIntervalTime(
-        setInterval(() => {
-          this.props.dispatch(setCounter(this.props.time.timer))
-        }, 1000)
-      ))
+      const numberTable = await AsyncStorage.getItem('numberTable')
+
+      if(numberTable) {
+        await this.setState({
+          numberTable
+        })
+
+        await this.props.dispatch(setIntervalTime(
+          setInterval(() => {
+            this.props.dispatch(setCounter(this.props.time.timer))
+          }, 1000)
+        ))
+
+      } else {
+        this.props.navigation.popToTop()
+      }
+
 
     }
 
@@ -55,6 +71,10 @@ class List extends Component {
         this.props.dispatch(addSubtotal(filterOrder[0].menu.price, filterOrder[0].qty))
 
       }
+
+      this.setState({
+        swipe: 110
+      })
 
     }
 
@@ -96,6 +116,12 @@ class List extends Component {
 
       this.props.dispatch(resetInterval())
 
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'Payment' })],
+      });
+
+      this.props.navigation.dispatch(resetAction)
 
     }
 
@@ -123,8 +149,8 @@ class List extends Component {
                                 name="slack"
                                 size={15}
                             />
-                            &nbsp;
-                            2
+                            &nbsp;&nbsp;
+                            {this.state.numberTable}
                             </Text>
                     </View>
                     <View style={{ justifyContent: 'center', backgroundColor: '#877dfa', paddingVertical: 6, paddingHorizontal: 10, borderRadius: 100 / 2 }}>
@@ -133,7 +159,7 @@ class List extends Component {
                                 name="clock"
                                 size={15}
                             />
-                            &nbsp;
+                            &nbsp;&nbsp;
                             {this.props.time.data}
                             </Text>
                     </View>
@@ -217,7 +243,15 @@ class List extends Component {
                                         </View>
                                         <View style={{ maxWidth: '60%', paddingVertical: 10, paddingHorizontal: 15, justifyContent: 'space-around' }}>
                                             <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
-                                            <Text>Rp. {item.price}</Text>
+                                            <Text>
+                                              <FontAwesome
+                                                name="dollar-sign"
+                                                size={15}
+                                                color="#877dfa"
+                                              />
+                                              &nbsp;
+                                              {converToPrice(item.price)}
+                                            </Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -233,18 +267,18 @@ class List extends Component {
 
                 {
                     this.props.order.data.length > 0 &&
-                    <View style={{minHeight: this.state.swipe, backgroundColor: 'transparent', alignItems: 'center'}}>
+                    <View style={{minHeight: this.state.swipe, alignItems: 'center', elevation: 12, backgroundColor: '#f0f0ff'}}>
                         {
                           this.state.swipe == 110 ?
                           <TouchableOpacity
                               onPress={() => this.setState({swipe : 220})}
-                              style={{padding: 10, backgroundColor: '#877dfa', position: 'absolute', top: 0, marginTop: -25, borderRadius: 100/20}}>
+                              style={{paddingHorizontal: 15, paddingVertical: 10, backgroundColor: '#877dfa', position: 'absolute', top: 0, marginTop: -25, borderRadius: 100/20}}>
                               <FontAwesome name="chevron-up" color="white" size={25} />
                           </TouchableOpacity>
                           :
                           <TouchableOpacity
                               onPress={() => this.setState({swipe : 110})}
-                              style={{padding: 10, backgroundColor: '#877dfa', position: 'absolute', top: 0, marginTop: -25, borderRadius: 100/20}}>
+                              style={{paddingHorizontal: 15, paddingVertical: 10, backgroundColor: '#877dfa', position: 'absolute', top: 0, marginTop: -25, borderRadius: 100/20}}>
                               <FontAwesome name="chevron-down" color="white" size={25} />
                           </TouchableOpacity>
                         }
@@ -261,7 +295,7 @@ class List extends Component {
                                 onPress={() => this.handleOrderMenu(item)}
                                 style={{minWidth: 120, backgroundColor: 'white', borderRadius: 100/25, marginHorizontal: 10, marginVertical: 10}}>
                                 <View style={{flex: 1}}>
-                                  <Text style={{justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, marginTop: -10, right: 0, marginRight: -10, backgroundColor: 'red', color: 'white', paddingVertical: 3, paddingHorizontal: 6, borderRadius:100/10}}>{item.qty}</Text>
+                                  <Text style={{justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, marginTop: -10, right: 0, marginRight: -10, backgroundColor: 'red', color: 'white', paddingBottom:2, paddingHorizontal: 6, borderRadius:100/2}}>{item.qty}</Text>
                                   <Image
                                   source={{uri : item.menu.image}}
                                   style={{flex: 1, width: undefined, height: undefined, resizeMode: 'contain'}}
@@ -275,19 +309,23 @@ class List extends Component {
                         {
                           this.state.swipe == 220 &&
                           <View style={{width: '100%', justifyContent: 'center', height: 120}}>
-                            <View style={{backgroundColor: 'white', height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8}}>
+                            <View style={{backgroundColor: 'white', height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8, marginHorizontal: 8, borderRadius: 6}}>
                               <Text>Price Estimation</Text>
-                              <Text>Rp. {this.props.order.subTotal}</Text>
+                              <Text>
+                                <FontAwesome
+                                  name="dollar-sign"
+                                  size={15}
+                                  color="#877dfa"
+                                />
+                                &nbsp;
+                                {converToPrice(this.props.order.subTotal)}
+                              </Text>
                             </View>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between', height: 50, marginTop: 10}}>
                               <TouchableOpacity
                                 onPress={this.handleResetOrder}
                                 style={{backgroundColor: 'red', minWidth: '20%', paddingHorizontal: 12, justifyContent: 'center', marginHorizontal: 8, borderRadius: 100/10, elevation: 2}}>
                                 <Text style={{color: 'white', textAlign: 'center'}}>Reset</Text>
-                              </TouchableOpacity>
-
-                              <TouchableOpacity style={{backgroundColor: 'green', minWidth: '20%', paddingHorizontal: 12, justifyContent: 'center', marginHorizontal: 8, borderRadius: 100/10, elevation: 2}}>
-                                <Text style={{color: 'white', textAlign: 'center'}}>Detail</Text>
                               </TouchableOpacity>
 
                               <TouchableOpacity

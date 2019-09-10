@@ -1,9 +1,9 @@
 import React from 'react'
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 
-import List from '../app/Menu/List'
 import Home from '../app'
+import List from '../app/Menu/List'
+import Payment from '../app/Payment'
 
 const AppNavigator = createStackNavigator({
   Home: {
@@ -11,7 +11,14 @@ const AppNavigator = createStackNavigator({
   },
   List: {
     screen: List,
+  },
+  Payment: {
+    screen: Payment,
   }
+},
+{
+  initialRouteName: 'Payment',
+  headerMode:'none'
 });
 
 export default createAppContainer(AppNavigator);

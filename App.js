@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import store from './src/_redux/store'
 import { Provider } from 'react-redux'
 
-import List from './src/app/Menu/List'
+import Route from './src/routes'
 
 export default class App extends Component {
 
   render() {
     return (
       <Provider store={store}>
-        <List />
+        <Route />
       </Provider>
     )
   }
