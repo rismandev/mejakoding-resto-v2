@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, Image, FlatList, Alert } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Image, FlatList, Alert, BackHandler } from 'react-native'
 import { connect } from 'react-redux'
 import FontAwesome from 'react-native-vector-icons/FontAwesome5'
 import AsyncStorage from '@react-native-community/async-storage'
@@ -8,6 +8,7 @@ import { StackActions, NavigationActions } from 'react-navigation'
 import { getMenuByCategory } from '../../_actions/Category'
 import { addOrderMenu, addQtyMenu, decQtyMenu, delOrderMenu, addSubtotal, minSubTotal, clearOrderMenu, confirmDataOrder } from '../../_actions/Order'
 import { setIntervalTime, setCounter, resetInterval } from '../../_actions/Time'
+import { addSubtotalToPayment } from '../../_actions/Payment'
 import { converToPrice } from '../../utils/Constant'
 
 class List extends Component {
@@ -20,24 +21,25 @@ class List extends Component {
 
     async componentDidMount() {
 
+      this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+
       const numberTable = await AsyncStorage.getItem('numberTable')
 
-      if(numberTable) {
-        await this.setState({
-          numberTable
-        })
+      await this.setState({
+        numberTable
+      })
 
-        await this.props.dispatch(setIntervalTime(
-          setInterval(() => {
-            this.props.dispatch(setCounter(this.props.time.timer))
-          }, 1000)
-        ))
+      await this.props.dispatch(setIntervalTime(
+        setInterval(() => {
+          this.props.dispatch(setCounter(this.props.time.timer))
+        }, 1000)
+      ))
 
-      } else {
-        this.props.navigation.popToTop()
-      }
+    }
 
+    componentWillUnmount() {
 
+      this.backHandler.remove()
     }
 
     handleCategory = (categoryId) => {
@@ -68,7 +70,7 @@ class List extends Component {
 
         this.props.dispatch(addQtyMenu(filterOrder[0]))
 
-        this.props.dispatch(addSubtotal(filterOrder[0].menu.price, filterOrder[0].qty))
+        this.props.dispatch(addSubtotal(filterOrder[0].menu.price, 1))
 
       }
 
@@ -108,20 +110,15 @@ class List extends Component {
 
     handleConfirm = () => {
 
+      this.props.dispatch(addSubtotalToPayment(this.props.order.subTotal))
+
       this.props.order.data.map((data) => {
 
-        this.props.dispatch(confirmDataOrder(data, this.props.order.subTotal))
+        this.props.dispatch(confirmDataOrder(data))
 
       })
 
-      this.props.dispatch(resetInterval())
-
-      const resetAction = StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'Payment' })],
-      });
-
-      this.props.navigation.dispatch(resetAction)
+      this.props.navigation.navigate('Payment')
 
     }
 
@@ -131,11 +128,21 @@ class List extends Component {
         'Confirm Order',
         'Are you sure confirm this order?',
         [
-          {text: 'Cancel', style: 'cancle'},
+          {text: 'Cancel', style: 'cancel'},
           {text: 'Confirm', onPress: this.handleConfirm}
         ],
         {cancelable: false}
       )
+
+    }
+
+    handleBackButton = () => {
+
+      AsyncStorage.clear()
+
+      BackHandler.exitApp()
+
+      return true;
 
     }
 

@@ -2,7 +2,6 @@ const initialState = {
   data : [],
   subTotal : 0,
   orders: [],
-  fixSubtotal: 0,
 }
 
 export default Order = (state = initialState, action) => {
@@ -43,7 +42,7 @@ export default Order = (state = initialState, action) => {
       return {...state, subTotal: state.subTotal - action.payload}
 
     case 'CONFIRM_DATA_ORDER':
-      return {...state, data: [], subTotal: 0, orders: [...state.orders, action.payload.orders], fixSubtotal: action.payload.subTotal}
+      return {...state, data: [], subTotal: 0, orders: [...state.orders, action.payload]}
 
     default:
       return state

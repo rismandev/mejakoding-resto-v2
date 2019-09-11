@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { View, Image, TextInput, ScrollView, TouchableOpacity, Text, StyleSheet } from 'react-native'
-import { StackActions, NavigationActions } from 'react-navigation'
 import AsyncStorage from '@react-native-community/async-storage'
 
 export default class Auth extends Component {
@@ -28,14 +27,9 @@ export default class Auth extends Component {
      */
     handleButton = async() => {
 
-      const resetAction = StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'List' })],
-      });
-
       await AsyncStorage.setItem('numberTable', this.state.number)
 
-      await this.props.navigation.dispatch(resetAction)
+      await this.props.navigation.navigate('List')
 
     }
 
@@ -64,13 +58,17 @@ export default class Auth extends Component {
 
                     {
                         // If Number Table Not Empty, Show Button
-                        this.state.number > 0 &&
+                        this.state.number > 0 ?
 
                         <TouchableOpacity
                             onPress={this.handleButton}
                             style={styles.formButton}>
                             <Text style={styles.formTextButton}>ORDER</Text>
                         </TouchableOpacity>
+                        :
+                        <View style={styles.Title}>
+                          <Text style={styles.TextTitle}>Welcome to MejaKoding</Text>
+                        </View>
                     }
                 </View>
             </ScrollView>
@@ -121,5 +119,14 @@ const styles = StyleSheet.create({
     },
     formTextButton : {
         color: 'white'
+    },
+    Title: {
+      marginTop: 10,
+      paddingVertical: 10,
+      paddingHorizontal: 15
+    },
+    TextTitle: {
+      fontSize: 18,
+      fontFamily: 'monospace'
     }
 })

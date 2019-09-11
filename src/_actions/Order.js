@@ -79,11 +79,11 @@ export const minSubTotal = (price, qty) => {
 
 }
 
-export const confirmDataOrder = (orders, subTotal) => {
+export const confirmDataOrder = (orders) => {
 
   return {
     type: 'CONFIRM_DATA_ORDER',
-    payload: {orders, subTotal}
+    payload: orders
   }
 
 }

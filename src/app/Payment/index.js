@@ -1,51 +1,51 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert, BackHandler, Modal } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert, BackHandler, ToastAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import { StackActions, NavigationActions } from 'react-navigation'
+import AlertPro from "react-native-alert-pro";
+import { connect } from 'react-redux';
 
+import { updateTotal, updateDiscount } from '../../_actions/Payment'
 import { converToPrice } from '../../utils/Constant'
 
 class Payment extends Component {
 
   state = {
     valueText: null,
-    valid: 0,
-    data: {
-      subTotal: 15000,
-      discount: 0,
-      serv: 1000,
-      tax: 1000,
-      total: 0,
-    },
-    promo: 0,
-    modalVisible: false
   }
 
   componentDidMount() {
 
     this.getTotal()
 
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
 
+    console.log(this.props.time.data)
+
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove()
   }
 
   getTotal () {
 
-    const { promo } = this.state
+    const { subTotal, discount } = this.props.payment.data
 
-    const { subTotal, discount, serv, tax } = this.state.data
+    const serv = Math.trunc((subTotal / 100) * 5)
+    const tax = Math.trunc((subTotal / 100) * 2.5)
 
-    const total = subTotal + serv + tax - discount - promo
+    const total = (subTotal + serv + tax) - discount
 
-    this.setState({
-      data : {
-        subTotal,
-        discount,
-        serv,
-        tax,
-        total
-      },
-      promo
-    })
+    const data = {
+      subTotal,
+      discount,
+      serv,
+      tax,
+      total
+    }
+
+    this.props.dispatch(updateTotal(data))
 
   }
 
@@ -63,29 +63,17 @@ class Payment extends Component {
 
   createIsValid = async() => {
 
-    if(this.state.valueText == 'SIAPKODING' || this.state.valueText == 'RDEV' && this.state.data.total > 20000) {
+    if(this.state.valueText == 'SIAPKODING' || this.state.valueText == 'RDEV' && this.props.payment.data.total > 20000) {
 
-      await this.setState({
-        valid: 1,
-        promo: 10000
-      })
+      this.props.dispatch(updateDiscount(1, 10000))
 
-      Alert.alert(
-        'PROMO CODE SUCCESS',
-        'You have a promo Rp. 10.000',
-        [
-          {text: 'OKE'}
-        ]
-      )
+      this.AlertPro.open()
 
       await this.getTotal()
 
-    } else if(this.state.valueText == 'SIAPKODING' || this.state.valueText == 'RDEV' && this.state.data.total < 20000) {
+    } else if(this.state.valueText == 'SIAPKODING' || this.state.valueText == 'RDEV' && this.props.payment.data.total < 20000) {
 
-      await this.setState({
-        valid: 0,
-        promo: 0,
-      })
+      this.props.dispatch(updateDiscount(0, 0))
 
       Alert.alert(
         'PROMO CODE FAILED',
@@ -99,44 +87,65 @@ class Payment extends Component {
 
     } else {
 
-      await this.setState({
-        valid: 0,
-        promo: 0,
-      })
+      this.props.dispatch(updateDiscount(0, 0))
 
       await this.getTotal()
 
     }
 
+  }
+
+  handleCallBill = () => {
+
+    this.props.navigation.navigate('Billing')
 
   }
 
   handleBackButton = () => {
 
-    Alert.alert(
-      'Exit App',
-      'Please complete payment before exit',
-      [
-        {text: 'Oke'}
-      ]
-    )
+    ToastAndroid.show('Please Complete The Payment Before Exit !', ToastAndroid.SHORT);
 
     return true;
 
   }
 
-  setModalVisible(visible) {
-    this.setState({modalVisible: visible});
-  }
-
   render() {
+
+    const { subTotal, discount, serv, tax, total } = this.props.payment.data
 
     return (
       <View style={{flex: 1, backgroundColor: '#f0f0ff'}}>
+
+        <AlertPro
+          ref={ref => {
+            this.AlertPro = ref;
+          }}
+          onConfirm={() => this.AlertPro.close()}
+          showCancel={false}
+          title="Promo Code Success"
+          message="You get a discount of 10,000"
+          textConfirm="Oke"
+          customStyles={{
+            mask: {
+              backgroundColor: "transparent"
+            },
+            container: {
+              borderWidth: 1,
+              borderColor: "#9900cc",
+              shadowColor: "#000000",
+              shadowOpacity: 0.1,
+              shadowRadius: 10
+            },
+            buttonConfirm: {
+              backgroundColor: "#877dfa"
+            }
+          }}
+        />
+
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{backgroundColor: 'transparent', marginHorizontal: 8, height: 160, marginVertical: 10, paddingTop: 10}}>
             <Image
-              source={require('../../assets/illustration/payment-icon.png')}
+              source={require('../../assets/illustration/transfer-icon.png')}
               style={{flex: 1, width: undefined, height: undefined, resizeMode: 'contain'}}
             />
           </View>
@@ -144,29 +153,29 @@ class Payment extends Component {
           <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.04)', margin: 10, borderRadius: 8, paddingHorizontal: 6, paddingVertical:3}}>
             <View style={{height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'white', borderRadius: 4, marginVertical: 3, borderWidth: .6, borderColor: 'white'}}>
               <Text style={{fontSize: 20}}>SubTotal</Text>
-              <Text style={{fontSize: 20}}>Rp. {converToPrice(this.state.data.subTotal)}</Text>
+              <Text style={{fontSize: 20}}>Rp. {converToPrice(subTotal)}</Text>
             </View>
             <View style={{height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'white', borderRadius: 4, marginVertical: 3, borderWidth: .6, borderColor: 'white'}}>
               <Text style={{fontSize: 20}}>Discount</Text>
-              <Text style={{fontSize: 20}}>Rp. {converToPrice(this.state.data.discount)}</Text>
+              <Text style={{fontSize: 20}}>Rp. {converToPrice(discount)}</Text>
             </View>
             <View style={{height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'white', borderRadius: 4, marginVertical: 3, borderWidth: .6, borderColor: 'white'}}>
-              <Text style={{fontSize: 20}}>Service Charge</Text>
-              <Text style={{fontSize: 20}}>Rp. {converToPrice(this.state.data.serv)}</Text>
+              <Text style={{fontSize: 20}}>Serv. Charge (5%)</Text>
+              <Text style={{fontSize: 20}}>Rp. {converToPrice(serv)}</Text>
             </View>
             <View style={{height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'white', borderRadius: 4, marginVertical: 3, borderWidth: .6, borderColor: 'white'}}>
-              <Text style={{fontSize: 20}}>Tax</Text>
-              <Text style={{fontSize: 20}}>Rp. {converToPrice(this.state.data.tax)}</Text>
+              <Text style={{fontSize: 20}}>Tax (2,5%)</Text>
+              <Text style={{fontSize: 20}}>Rp. {converToPrice(tax)}</Text>
             </View>
-            <View style={{height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'white', borderRadius: 4, marginVertical: 3, borderWidth: .6, borderColor: this.state.valid == 1 ? 'green' : 'white'}}>
+            <View style={{height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'white', borderRadius: 4, marginVertical: 3, borderWidth: .6, borderColor: this.props.payment.valid == 1 ? 'green' : 'white'}}>
               <TextInput
                 placeholder="INSERT PROMO CODE HERE"
                 value={this.state.valueText}
                 onChangeText={(text) => this.handleChangeText(text)}
-                style={{color: this.state.valid == 1 ? 'green' : 'black'}}
+                style={{color: this.props.payment.valid == 1 ? 'green' : 'black'}}
               />
                 {
-                  this.state.valid == 1 ?
+                  this.props.payment.valid == 1 ?
                   <Icon
                     name='check-circle'
                     size={25}
@@ -181,12 +190,14 @@ class Payment extends Component {
             </View>
             <View style={{height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10, backgroundColor: 'white', borderRadius: 4, marginVertical: 3, borderWidth: .6, borderColor: 'white'}}>
               <Text style={{fontSize: 20}}>Total</Text>
-              <Text style={{fontSize: 20}}>Rp. {converToPrice(this.state.data.total)}</Text>
+              <Text style={{fontSize: 20}}>Rp. {converToPrice(total)}</Text>
             </View>
           </View>
 
         </ScrollView>
-        <TouchableOpacity style={{padding: 10, backgroundColor: '#877dfa', width: '40%', position: 'absolute', left: '30%', bottom: 0, marginBottom: 15, borderRadius: 100/25, elevation: 2.5}}>
+        <TouchableOpacity
+          onPress={this.handleCallBill}
+          style={{padding: 10, backgroundColor: '#877dfa', width: '40%', position: 'absolute', left: '30%', bottom: 0, marginBottom: 15, borderRadius: 100/25, elevation: 2.5}}>
           <Text style={{color: 'white', fontSize: 18, textTransform: 'uppercase'}}>
             <Icon
               name='hand-holding-usd'
@@ -203,4 +214,14 @@ class Payment extends Component {
 
 }
 
-export default Payment;
+const mapStateToProps = (state) => {
+
+  return {
+    payment: state.Payment,
+    order: state.Order,
+    time: state.Time
+  }
+
+}
+
+export default connect(mapStateToProps)(Payment);
