@@ -1,3 +1,10 @@
+export const addTableNumber = (number) => {
+  return {
+    type: 'ADD_TABLE_NUMBER',
+    payload: {number}
+  }
+}
+
 export const updateTotal = (data) => {
   return {
     type: 'UPDATE_TOTAL',

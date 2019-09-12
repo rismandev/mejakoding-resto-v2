@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
 import { View, Image, TextInput, ScrollView, TouchableOpacity, Text, StyleSheet } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage'
+import { connect } from 'react-redux'
 
-export default class Auth extends Component {
+import { addTableNumber } from '../_actions/Payment'
+
+class Auth extends Component {
 
     // State
     state = {
         number: 0
-    }
-
-    componentDidMount() {
-      AsyncStorage.clear()
     }
 
     /*
@@ -27,7 +25,7 @@ export default class Auth extends Component {
      */
     handleButton = async() => {
 
-      await AsyncStorage.setItem('numberTable', this.state.number)
+      await this.props.dispatch(addTableNumber(this.state.number))
 
       await this.props.navigation.navigate('List')
 
@@ -76,6 +74,14 @@ export default class Auth extends Component {
     }
 
 }
+
+const mapStateToProps = (state) => {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps)(Auth);
 
 const styles = StyleSheet.create({
     container : {
