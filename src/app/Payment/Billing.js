@@ -40,7 +40,7 @@ class Billing extends Component {
           <Text style={{marginTop: 10, color: 'green'}}>Time Spent : {this.props.time.data}</Text>
           <TouchableOpacity
             onPress={() => BackHandler.exitApp()}
-            style={{marginVertical: 15, backgroundColor: 'red', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 4, borderColor: 'white', borderWidth: .5}}>
+            style={{marginVertical: 25, backgroundColor: 'red', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 4, borderColor: 'white', borderWidth: .5}}>
             <Text style={{color: 'white', fontSize: 16}}>Exit</Text>
           </TouchableOpacity>
         </View>
