@@ -21,7 +21,6 @@ const AppNavigator = createStackNavigator({
   }
 },
 {
-  initialRouteName: 'List',
   headerMode:'none'
 });
 

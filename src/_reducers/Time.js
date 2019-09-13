@@ -27,7 +27,7 @@ export default Time = (state = initialState, action) => {
       return {...state, timer: action.payload, data: converToTime(action.payload)}
       break
     case 'RESET_INTERVAL_TIME':
-      return {...state, time: '', timer: 0, data: '00:00:00'}
+      return {...state, time: '', timer: 0}
       break
     default:
       return state

@@ -38,13 +38,15 @@ class Auth extends Component {
 
       if(this.props.payment.isLoading) {
         return (
-          <ActivityIndicator
-            size={50}
-            color="#877dfa"
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
-          />
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{marginVertical: 10, fontSize: 20}}>Waiting</Text>
+            <ActivityIndicator
+              size={50}
+              color="#877dfa"
+            />
+          </View>
         )
-      }
+      }else{
 
         return (
             <ScrollView
@@ -85,6 +87,8 @@ class Auth extends Component {
                 </View>
             </ScrollView>
         )
+
+      }
     }
 
 }

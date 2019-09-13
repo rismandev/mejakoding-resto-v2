@@ -40,6 +40,8 @@ class List extends Component {
         }, 1000)
       ))
 
+      await this.props.dispatch(clearOrderMenu())
+
       await this.props.dispatch(getAllCategory())
 
       await this.props.dispatch(getAllMenu())
@@ -121,11 +123,16 @@ class List extends Component {
 
       this.props.dispatch(addSubtotalToPayment(this.props.order.subTotal))
 
+      const { paymentId } = this.props.payment.data
       this.props.order.data.map((data) => {
 
-        this.props.dispatch(confirmDataOrder(data))
+        this.props.dispatch(confirmDataOrder(data, paymentId))
 
       })
+
+      clearInterval(this.props.time.time)
+
+      this.props.dispatch(resetInterval())
 
       this.props.navigation.navigate('Payment')
 
@@ -154,6 +161,19 @@ class List extends Component {
     }
 
     render() {
+
+
+      if(this.props.order.isLoading) {
+        return (
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{marginVertical: 10, fontSize: 20}}>Waiting</Text>
+            <ActivityIndicator
+              size={50}
+              color="#877dfa"
+            />
+          </View>
+        )
+      }
 
       return (
           <View style={{ flex: 1, backgroundColor: '#f0f0ff' }}>
@@ -244,7 +264,28 @@ class List extends Component {
                         extraData={this.state.refresh}
                         renderItem={({item}) => {
 
-                          if(item.categoryId == this.props.category.categoryId) {
+                          if(this.props.category.categoryId == 1) {
+                            return (
+                              <TouchableOpacity
+                                  onPress={() => this.handleMenuItem(item)}
+                                  style={{ marginVertical: 5, borderRadius: 100 / 25, minHeight: 100, elevation: 2.5, marginHorizontal: 4, backgroundColor: 'white' }}
+                              >
+                                  <View style={{ flexDirection: 'row', maxWidth: '100%' }}>
+                                      <View style={{ maxWidth: '40%', flex: 1, height: 100, paddingHorizontal: 8 }}>
+                                          <Image
+                                              source={{ uri: item.image }}
+                                              style={{ width: undefined, height: undefined, resizeMode: 'contain', flex: 1 }} />
+                                      </View>
+                                      <View style={{ maxWidth: '60%', paddingVertical: 10, paddingHorizontal: 15, justifyContent: 'space-around' }}>
+                                          <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
+                                          <Text>
+                                            Rp. {converToPrice(item.price)}
+                                          </Text>
+                                      </View>
+                                  </View>
+                              </TouchableOpacity>
+                            )
+                          }else if(item.categoryId == this.props.category.categoryId) {
                             return (
                               <TouchableOpacity
                                   onPress={() => this.handleMenuItem(item)}

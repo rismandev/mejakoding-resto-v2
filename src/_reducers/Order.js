@@ -2,6 +2,8 @@ const initialState = {
   data : [],
   subTotal : 0,
   orders: [],
+  isLoading: false,
+  isError: false
 }
 
 export default Order = (state = initialState, action) => {
@@ -41,8 +43,11 @@ export default Order = (state = initialState, action) => {
     case 'MIN_SUB_TOTAL':
       return {...state, subTotal: state.subTotal - action.payload}
 
-    case 'CONFIRM_DATA_ORDER':
-      return {...state, data: [], subTotal: 0, orders: [...state.orders, action.payload]}
+    case 'CONFIRM_DATA_ORDER_PENDING':
+      return {...state, isLoading: true}
+
+    case 'CONFIRM_DATA_ORDER_FULFILLED':
+      return {...state, data: [], subTotal: 0, orders: action.payload.data, isLoading: false}
 
     default:
       return state

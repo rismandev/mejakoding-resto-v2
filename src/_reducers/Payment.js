@@ -10,7 +10,12 @@ const initialState = {
     total: 0,
   },
   isLoading: false,
-  isError: false
+  isError: false,
+  dataItem: {
+    paymentId: 0,
+    tableNumber: 0,
+    total: 0,
+  }
 }
 
 export default Payment = (state = initialState, action) => {
@@ -22,6 +27,27 @@ export default Payment = (state = initialState, action) => {
       return {...state, data: {...state.data, paymentId: id, tableNumber: tableNumber}, isLoading: false}
     case 'ADD_TABLE_NUMBER_REJECTED':
       return {...state, isError: true, isLoading: false}
+
+    case 'UPDATE_PAYMENT_PENDING':
+      return {...state, isLoading: true, isError: false}
+    case 'UPDATE_PAYMENT_FULFILLED':
+      const dataItem = {
+        paymentId: state.data.paymentId,
+        tableNumber: state.data.tableNumber,
+        total: state.data.total
+      }
+      const data = {
+        paymentId: 0,
+        tableNumber: 0,
+        subTotal: 0,
+        discount: 0,
+        serv: 0,
+        tax: 0,
+        total: 0,
+      }
+      return {...state, valid: 0, dataItem, data, isLoading: false, isError: false}
+    case 'UPDATE_PAYMENT_REJECTED':
+      return {...state, isLoading: false, isError: true}
 
     case 'UPDATE_TOTAL':
       return {...state, data: action.payload}

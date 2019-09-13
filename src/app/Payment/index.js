@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert, BackHandler, ToastAndroid } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Alert, BackHandler, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { StackActions, NavigationActions } from 'react-navigation'
 import AlertPro from "react-native-alert-pro";
+import AlertPro2 from "react-native-alert-pro";
 import { connect } from 'react-redux';
 
-import { updateTotal, updateDiscount } from '../../_actions/Payment'
+import { updateTotal, updateDiscount, updateDataPayment } from '../../_actions/Payment'
 import { converToPrice } from '../../utils/Constant'
 
 class Payment extends Component {
@@ -97,15 +98,20 @@ class Payment extends Component {
 
   }
 
-  handleCallBill = () => {
+  handleCallBill = async() => {
 
-    this.props.navigation.navigate('Billing')
+    const { data } = this.props.payment
+    const finishedTime = this.props.time.data
+
+    await this.props.dispatch(updateDataPayment(data, finishedTime))
+
+    await this.props.navigation.navigate('Billing')
 
   }
 
   handleBackButton = () => {
 
-    ToastAndroid.show('Please Complete The Payment Before Exit !', ToastAndroid.SHORT);
+    this.AlertPro2.open()
 
     return true;
 
@@ -114,6 +120,18 @@ class Payment extends Component {
   render() {
 
     const { subTotal, discount, serv, tax, total } = this.props.payment.data
+
+    if(this.props.payment.isLoading) {
+      return (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{marginVertical: 10, fontSize: 20}}>Waiting</Text>
+          <ActivityIndicator
+            size={50}
+            color="#877dfa"
+          />
+        </View>
+      )
+    }
 
     return (
       <View style={{flex: 1, backgroundColor: '#f0f0ff'}}>
@@ -126,6 +144,32 @@ class Payment extends Component {
           showCancel={false}
           title="Promo Code Success"
           message="You get a discount of 10,000"
+          textConfirm="Oke"
+          customStyles={{
+            mask: {
+              backgroundColor: "transparent"
+            },
+            container: {
+              borderWidth: 1,
+              borderColor: "#9900cc",
+              shadowColor: "#000000",
+              shadowOpacity: 0.1,
+              shadowRadius: 10
+            },
+            buttonConfirm: {
+              backgroundColor: "#877dfa"
+            }
+          }}
+        />
+
+        <AlertPro2
+          ref={ref => {
+            this.AlertPro2 = ref;
+          }}
+          onConfirm={() => this.AlertPro2.close()}
+          showCancel={false}
+          title="Please Continue Payment"
+          message="You not Exit App"
           textConfirm="Oke"
           customStyles={{
             mask: {

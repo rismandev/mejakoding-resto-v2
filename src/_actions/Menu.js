@@ -1,8 +1,9 @@
 import Axios from 'axios'
+import { API } from 'react-native-dotenv'
 
 export const getAllMenu = () => {
   return {
     type: 'GET_MENU',
-    payload: Axios.get('http://192.168.0.28:8000/api/v2/all_menu')
+    payload: Axios.get(`${API}all_menu`)
   }
 }

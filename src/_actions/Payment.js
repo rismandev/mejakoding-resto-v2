@@ -1,15 +1,41 @@
 import Axios from 'axios'
+import { API } from 'react-native-dotenv'
 
 export const addTableNumber = (number) => {
   return {
     type: 'ADD_TABLE_NUMBER',
     payload: Axios({
       method: 'POST',
-      url: `http://192.168.0.28:8000/api/v2/add_payment`,
+      url: `${API}add_payment`,
       data: {
         tableNumber: number,
         isPaid: false
       }
+    })
+  }
+}
+
+export const updateDataPayment = (data, finishedTime) => {
+
+  const payment = {
+    tableNumber: data.tableNumber,
+    finishedTime,
+    subtotal: data.subTotal,
+    discount: data.discount,
+    serviceCharge: data.serv,
+    tax: data.tax,
+    total: data.total,
+    isPaid: 1
+  }
+
+  const id = data.paymentId
+
+  return {
+    type: 'UPDATE_PAYMENT',
+    payload: Axios({
+      method: 'PATCH',
+      url: `${API}update_payment/${id}/tableNumber/${data.tableNumber}`,
+      data: payment
     })
   }
 }

@@ -1,5 +1,5 @@
 const initialState = {
-  categoryId: 1,
+  categoryId: 0,
   data : []
 }
 
@@ -9,7 +9,7 @@ export default Category = (state = initialState, action) => {
       return {...state }
 
     case 'GET_CATEGORY_FULFILLED':
-      return {...state, data: action.payload.data}
+      return {...state, data: action.payload.data, categoryId: 1}
 
     case 'GET_MENU_CATEGORY':
       return {...state, categoryId: action.payload}

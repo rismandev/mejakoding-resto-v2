@@ -1,3 +1,6 @@
+import Axios from 'axios'
+import { API } from 'react-native-dotenv'
+
 export const addOrderMenu = (item) => {
 
   const dataItem = {
@@ -79,11 +82,21 @@ export const minSubTotal = (price, qty) => {
 
 }
 
-export const confirmDataOrder = (orders) => {
+export const confirmDataOrder = (order, paymentId) => {
 
   return {
     type: 'CONFIRM_DATA_ORDER',
-    payload: orders
+    payload: Axios({
+      method: 'POST',
+      url: `${API}add_order`,
+      data: {
+        menuId: order.menu.id,
+        paymentId,
+        qty: order.qty,
+        price: order.menu.price,
+        status: 1
+      }
+    })
   }
 
 }

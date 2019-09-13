@@ -1,10 +1,11 @@
 import Axios from 'axios'
+import { API } from 'react-native-dotenv'
 
 export const getAllCategory = () => {
 
   return {
     type: 'GET_CATEGORY',
-    payload: Axios.get('http://192.168.0.28:8000/api/v2/all_category')
+    payload: Axios.get(`${API}all_category`)
   }
 
 }
