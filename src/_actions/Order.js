@@ -95,7 +95,11 @@ export const confirmDataOrder = (order, paymentId) => {
         qty: order.qty,
         price: order.menu.price,
         status: 1
-      }
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      responseType: 'json'
     })
   }
 

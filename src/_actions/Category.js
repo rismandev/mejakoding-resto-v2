@@ -5,7 +5,12 @@ export const getAllCategory = () => {
 
   return {
     type: 'GET_CATEGORY',
-    payload: Axios.get(`${API}all_category`)
+    payload: Axios({
+      method: 'GET',
+      url: `${API}all_category`,
+      responseType: 'json'
+    })
+    // payload: Axios.get(`${API}all_category`)
   }
 
 }

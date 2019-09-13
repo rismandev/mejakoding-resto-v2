@@ -10,7 +10,8 @@ export const addTableNumber = (number) => {
       data: {
         tableNumber: number,
         isPaid: false
-      }
+      },
+      responseType: 'json'
     })
   }
 }
@@ -35,7 +36,8 @@ export const updateDataPayment = (data, finishedTime) => {
     payload: Axios({
       method: 'PATCH',
       url: `${API}update_payment/${id}/tableNumber/${data.tableNumber}`,
-      data: payment
+      data: payment,
+      responseType: 'json'
     })
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, BackHandler, Alert } from 'react-native'
+import { View, Text, Image, BackHandler, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 
 class Billing extends Component {
@@ -37,6 +37,11 @@ class Billing extends Component {
         <View style={{width: '100%', marginVertical: 12, alignItems: 'center'}}>
           <Text>Please Bring Your Phone to Cashier</Text>
           <Text style={{marginTop: 10}}>Payment Code : {paymentId}.{tableNumber}.{total}</Text>
+          <TouchableOpacity
+            onPress={() => BackHandler.exitApp()}
+            style={{marginVertical: 15, backgroundColor: 'red', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 4, borderColor: 'white', borderWidth: .5}}>
+            <Text style={{color: 'white', fontSize: 16}}>Exit</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
