@@ -1,6 +1,7 @@
 const initialState = {
   valid: 0,
   data: {
+    paymentId: 0,
     tableNumber: 0,
     subTotal: 0,
     discount: 0,
@@ -17,7 +18,8 @@ export default Payment = (state = initialState, action) => {
     case 'ADD_TABLE_NUMBER_PENDING':
       return {...state, isLoading: true}
     case 'ADD_TABLE_NUMBER_FULFILLED':
-      return {...state, data: {...state.data, tableNumber: action.payload.number}, isLoading: false}
+      const { id, tableNumber } = action.payload.data
+      return {...state, data: {...state.data, paymentId: id, tableNumber: tableNumber}, isLoading: false}
     case 'ADD_TABLE_NUMBER_REJECTED':
       return {...state, isError: true, isLoading: false}
 

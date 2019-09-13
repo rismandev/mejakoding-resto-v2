@@ -30,7 +30,7 @@ class Payment extends Component {
 
   getTotal () {
 
-    const { subTotal, discount } = this.props.payment.data
+    const { paymentId, tableNumber, subTotal, discount } = this.props.payment.data
 
     const serv = Math.trunc((subTotal / 100) * 5)
     const tax = Math.trunc((subTotal / 100) * 2.5)
@@ -38,6 +38,8 @@ class Payment extends Component {
     const total = (subTotal + serv + tax) - discount
 
     const data = {
+      paymentId,
+      tableNumber,
       subTotal,
       discount,
       serv,

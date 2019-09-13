@@ -4,13 +4,19 @@ import { connect } from 'react-redux'
 import FontAwesome from 'react-native-vector-icons/FontAwesome5'
 import { StackActions, NavigationActions } from 'react-navigation'
 
-import { getMenuByCategory } from '../../_actions/Category'
+import { getMenuByCategory, getAllCategory } from '../../_actions/Category'
+import { getAllMenu } from '../../_actions/Menu'
 import { addOrderMenu, addQtyMenu, decQtyMenu, delOrderMenu, addSubtotal, minSubTotal, clearOrderMenu, confirmDataOrder } from '../../_actions/Order'
 import { setIntervalTime, setCounter, resetInterval } from '../../_actions/Time'
 import { addSubtotalToPayment } from '../../_actions/Payment'
 import { converToPrice } from '../../utils/Constant'
 
 class List extends Component {
+
+    constructor(){
+      super()
+      this.getCategory
+    }
 
     state = {
       swipe: 110,
@@ -33,6 +39,10 @@ class List extends Component {
           this.props.dispatch(setCounter(this.props.time.timer))
         }, 1000)
       ))
+
+      await this.props.dispatch(getAllCategory())
+
+      await this.props.dispatch(getAllMenu())
 
     }
 
@@ -137,8 +147,6 @@ class List extends Component {
 
     handleBackButton = () => {
 
-      AsyncStorage.clear()
-
       BackHandler.exitApp()
 
       return true;
@@ -146,15 +154,6 @@ class List extends Component {
     }
 
     render() {
-
-      if(this.props.payment.isLoading) {
-        return (
-          <ActivityIndicator
-            size={50}
-            color="#877dfa"
-          />
-        )
-      }
 
       return (
           <View style={{ flex: 1, backgroundColor: '#f0f0ff' }}>
@@ -260,13 +259,7 @@ class List extends Component {
                                       <View style={{ maxWidth: '60%', paddingVertical: 10, paddingHorizontal: 15, justifyContent: 'space-around' }}>
                                           <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
                                           <Text>
-                                            <FontAwesome
-                                              name="dollar-sign"
-                                              size={15}
-                                              color="#877dfa"
-                                            />
-                                            &nbsp;
-                                            {converToPrice(item.price)}
+                                            Rp. {converToPrice(item.price)}
                                           </Text>
                                       </View>
                                   </View>
@@ -328,13 +321,7 @@ class List extends Component {
                           <View style={{backgroundColor: 'white', height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8, marginHorizontal: 8, borderRadius: 6}}>
                             <Text>Price Estimation</Text>
                             <Text>
-                              <FontAwesome
-                                name="dollar-sign"
-                                size={15}
-                                color="#877dfa"
-                              />
-                              &nbsp;
-                              {converToPrice(this.props.order.subTotal)}
+                              Rp. {converToPrice(this.props.order.subTotal)}
                             </Text>
                           </View>
                           <View style={{flexDirection: 'row', justifyContent: 'space-between', height: 50, marginTop: 10}}>

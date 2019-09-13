@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { View, Image, TextInput, ScrollView, TouchableOpacity, Text, StyleSheet } from 'react-native'
+import { View, Image, TextInput, ScrollView, TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 
+import { getAllCategory } from '../_actions/Category'
 import { addTableNumber } from '../_actions/Payment'
 
 class Auth extends Component {
@@ -27,11 +28,24 @@ class Auth extends Component {
 
       await this.props.dispatch(addTableNumber(this.state.number))
 
+      await this.props.dispatch(getAllCategory())
+
       await this.props.navigation.navigate('List')
 
     }
 
     render() {
+
+      if(this.props.payment.isLoading) {
+        return (
+          <ActivityIndicator
+            size={50}
+            color="#877dfa"
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+          />
+        )
+      }
+
         return (
             <ScrollView
                 contentContainerStyle={styles.container}
@@ -77,7 +91,7 @@ class Auth extends Component {
 
 const mapStateToProps = (state) => {
   return {
-
+    payment : state.Payment
   }
 }
 
