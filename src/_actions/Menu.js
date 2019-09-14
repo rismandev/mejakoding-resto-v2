@@ -9,6 +9,5 @@ export const getAllMenu = () => {
       url: `${API}all_menu`,
       responseType: 'json'
     })
-    // payload: Axios.get(`${API}all_menu`)
   }
 }

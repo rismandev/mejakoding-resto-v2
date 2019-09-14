@@ -36,6 +36,7 @@ class Auth extends Component {
 
     render() {
 
+      // Create Loading Using ActivityIndicator
       if(this.props.payment.isLoading) {
         return (
           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -102,55 +103,55 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps)(Auth);
 
 const styles = StyleSheet.create({
-    container : {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white'
-    },
-    cardImage : {
-        width: '100%',
-        height: 280
-    },
-    itemImage : {
-        flex: 1,
-        width: undefined,
-        height: undefined,
-        resizeMode: 'contain'
-    },
-    cardForm : {
-        width: '100%',
-        alignItems: 'center',
-        paddingVertical: 10
-    },
-    formTextInput : {
-        paddingVertical: 10,
-        paddingHorizontal: 8,
-        borderWidth: .5,
-        borderColor: '#877dfa',
-        borderRadius: 4,
-        width: '80%',
-        textAlign: 'center'
-    },
-    formButton : {
-        backgroundColor: '#877dfa',
-        marginVertical: 15,
-        width: '80%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingVertical: 15,
-        borderRadius: 4
-    },
-    formTextButton : {
-        color: 'white'
-    },
-    Title: {
-      marginTop: 10,
-      paddingVertical: 10,
-      paddingHorizontal: 15
-    },
-    TextTitle: {
-      fontSize: 18,
-      fontFamily: 'monospace'
-    }
+  container : {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white'
+  },
+  cardImage : {
+    width: '100%',
+    height: 280
+  },
+  itemImage : {
+    flex: 1,
+    width: undefined,
+    height: undefined,
+    resizeMode: 'contain'
+  },
+  cardForm : {
+    width: '100%',
+    alignItems: 'center',
+    paddingVertical: 10
+  },
+  formTextInput : {
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    borderWidth: .5,
+    borderColor: '#877dfa',
+    borderRadius: 4,
+    width: '80%',
+    textAlign: 'center'
+  },
+  formButton : {
+    backgroundColor: '#877dfa',
+    marginVertical: 15,
+    width: '80%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderRadius: 4
+  },
+  formTextButton : {
+    color: 'white'
+  },
+  Title: {
+    marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15
+  },
+  TextTitle: {
+    fontSize: 18,
+    fontFamily: 'monospace'
+  }
 })

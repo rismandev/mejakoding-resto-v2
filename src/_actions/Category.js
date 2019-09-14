@@ -10,7 +10,6 @@ export const getAllCategory = () => {
       url: `${API}all_category`,
       responseType: 'json'
     })
-    // payload: Axios.get(`${API}all_category`)
   }
 
 }
