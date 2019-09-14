@@ -34,7 +34,7 @@ class Payment extends Component {
     const tax = Math.trunc((subTotal / 100) * 2.5)
     const total = (subTotal + serv + tax) - discount
 
-    const data =Alert {
+    const data = {
       paymentId,
       tableNumber,
       subTotal,
