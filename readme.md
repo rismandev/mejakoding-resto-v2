@@ -1,10 +1,12 @@
 ## Meja Koding Resto Version 2.0.0
 This Application makes it easy for users to order menus and pay for orders in restaurants.
 
-## Screenshots & Video Demo
+## GIF Demo & Screenshots
 
 <p float="left">
-  <iframe src="https://drive.google.com/file/d/1m8mL5adYbF0Tx2mcEDD5m5X-dR6oDtun/preview" width="640" height="480"></iframe>
+  <img src="https://drive.google.com/uc?id=1PAIsVwFZJmahG2OE7EfU_mLq89tZSsMM" width="150" />
+  <img src="https://drive.google.com/uc?id=1j6WEcCf_rQT1ES5-2wPtVKlawrNJvpUu" width="150"  />
+  <img src="https://drive.google.com/uc?id=1GcDiR2Ut17lPIhhkgIXsd5nT9mjvvdYh" width="150"  />
 </p>
 <p float="left">
   <img src="https://drive.google.com/uc?id=10Zmeo-ub1B_s-CgevTbS0pJk2sP2Y4mt" width="150" />
