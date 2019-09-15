@@ -31,9 +31,6 @@ This Application makes it easy for users to order menus and pay for orders in re
 * Order whatever menu you want
 * Promo Code
 
-## App Presentation Slides
-[<img width=75 src="https://cdn.dribbble.com/users/198461/screenshots/1087053/attachments/135506/Google_Slides_Icon.png">](https://drive.google.com/uc?id=1_LzsM33knmgDV93TpfNPOBIeRpl-iE7bGRrgo04BY5I)
-
 ## Why Meja Koding?
 * It's React Native, so it support android & iOS by default!
 * UI Friendly
@@ -67,5 +64,7 @@ $ react-native run-android
   * Website: http://www.risman.site
   * email: rismandev@gmail.com
   
-## Download Apk
+<p float="left">  
+[<img width=75 src="https://cdn.dribbble.com/users/198461/screenshots/1087053/attachments/135506/Google_Slides_Icon.png">](https://drive.google.com/uc?id=1_LzsM33knmgDV93TpfNPOBIeRpl-iE7bGRrgo04BY5I)
 [![Mejakoding Download](https://i1.wp.com/apkmodsios.com/wp-content/uploads/2018/12/Download-Infinite-Design-3.4.10-Apk.png)](https://drive.google.com/uc?id=1aYblY1OoFzWcDxc2kDSZYehX31YinvHr)
+</p>
