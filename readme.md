@@ -4,7 +4,7 @@ This Application makes it easy for users to order menus and pay for orders in re
 ## Screenshots & Video Demo
 
 <p float="left">
-  <img src="https://drive.google.com/uc?id=1m8mL5adYbF0Tx2mcEDD5m5X-dR6oDtun" width="200" />
+  <iframe src="https://drive.google.com/file/d/1m8mL5adYbF0Tx2mcEDD5m5X-dR6oDtun/preview" width="640" height="480"></iframe>
 </p>
 <p float="left">
   <img src="https://drive.google.com/uc?id=10Zmeo-ub1B_s-CgevTbS0pJk2sP2Y4mt" width="150" />
