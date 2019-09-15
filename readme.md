@@ -65,7 +65,10 @@ $ react-native run-android
   * email: rismandev@gmail.com
   
 <p float="left">  
-[<img width=75 src="https://cdn.dribbble.com/users/198461/screenshots/1087053/attachments/135506/Google_Slides_Icon.png">](https://drive.google.com/uc?id=1_LzsM33knmgDV93TpfNPOBIeRpl-iE7bGRrgo04BY5I)
-  
-[[Mejakoding Download](https://i1.wp.com/apkmodsios.com/wp-content/uploads/2018/12/Download-Infinite-Design-3.4.10-Apk.png)](https://drive.google.com/uc?id=1aYblY1OoFzWcDxc2kDSZYehX31YinvHr)
+  <a href="https://drive.google.com/uc?id=1_LzsM33knmgDV93TpfNPOBIeRpl-iE7bGRrgo04BY5I">
+    <img width=75 src="https://cdn.dribbble.com/users/198461/screenshots/1087053/attachments/135506/Google_Slides_Icon.png">
+  </a>
+  <a href="https://drive.google.com/uc?id=1aYblY1OoFzWcDxc2kDSZYehX31YinvHr">
+    <img width=75 src="https://i1.wp.com/apkmodsios.com/wp-content/uploads/2018/12/Download-Infinite-Design-3.4.10-Apk.png">
+  </a>
 </p>
