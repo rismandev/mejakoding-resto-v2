@@ -246,14 +246,16 @@ class List extends Component {
                           <Text style={{ fontWeight: 'bold' }}>Click the menu to add cart</Text>
                       </View>
                       {/* Menu From API */}
-                      <FlatList
-                        data={this.props.menu.data}
-                        keyExtractor={(item, index) => item.id.toString()}
-                        showsVerticalScrollIndicator={false}
-                        extraData={this.state.refresh}
-                        renderItem={({item}) => {
+                      {
+                        /* All Menus */
+                        this.props.category.categoryId == 1 ?
+                        <FlatList
+                          data={this.props.menu.data}
+                          keyExtractor={(item, index) => item.id.toString()}
+                          showsVerticalScrollIndicator={false}
+                          extraData={this.state.refresh}
+                          renderItem={({item}) => {
 
-                          if(this.props.category.categoryId == 1) {
                             return (
                               <TouchableOpacity
                                 onPress={() => this.handleMenuItem(item)}
@@ -268,37 +270,52 @@ class List extends Component {
                                   <View style={styles.viewDataMenu}>
                                     <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
                                     <Text>
-                                      Rp. {converToPrice(item.price)}
+                                    Rp. {converToPrice(item.price)}
                                     </Text>
                                   </View>
                                 </View>
                               </TouchableOpacity>
                             )
-                          }else if(item.categoryId == this.props.category.categoryId) {
-                            return (
-                              <TouchableOpacity
-                                  onPress={() => this.handleMenuItem(item)}
-                                  style={styles.buttonMenu}
-                              >
-                                  <View style={styles.viewMenu}>
+
+                          }}
+                        />
+                        :
+                        /* Menu by Category */
+                        <FlatList
+                          data={this.props.menu.data}
+                          keyExtractor={(item, index) => item.id.toString()}
+                          showsVerticalScrollIndicator={false}
+                          extraData={this.state.refresh}
+                          renderItem={({item}) => {
+
+                              if(item.categoryId == this.props.category.categoryId){
+
+                                return (
+                                  <TouchableOpacity
+                                    onPress={() => this.handleMenuItem(item)}
+                                    style={styles.buttonMenu}
+                                  >
+                                    <View style={styles.viewMenu}>
                                       <View style={styles.viewImageMenu}>
-                                          <Image
-                                              source={{ uri: item.image }}
-                                              style={styles.ImageMenu} />
+                                        <Image
+                                          source={{ uri: item.image }}
+                                          style={styles.Image} />
                                       </View>
                                       <View style={styles.viewDataMenu}>
-                                          <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
-                                          <Text>
-                                            Rp. {converToPrice(item.price)}
-                                          </Text>
+                                        <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
+                                        <Text>
+                                        Rp. {converToPrice(item.price)}
+                                        </Text>
                                       </View>
-                                  </View>
-                              </TouchableOpacity>
-                            )
-                          }
+                                    </View>
+                                  </TouchableOpacity>
+                                )
 
-                        }}
-                      />
+                              }
+
+                          }}
+                        />
+                      }
                   </View>
 
               </ScrollView>
