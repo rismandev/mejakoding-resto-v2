@@ -67,5 +67,5 @@ $ react-native run-android
   * Website: http://www.risman.site
   * email: rismandev@gmail.com
   
-## Download App (Demo usage only)
+## Download Apk
 [![Mejakoding Download](https://i1.wp.com/apkmodsios.com/wp-content/uploads/2018/12/Download-Infinite-Design-3.4.10-Apk.png)](https://drive.google.com/uc?id=1aYblY1OoFzWcDxc2kDSZYehX31YinvHr)
